@@ -1,16 +1,17 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://tfsmqkqkfpppawvendzw.supabase.co';
-const supabaseAnonKey = 'sb_publishable_bTcFI3OyGSvsllWjJJNuig_vWn7SDJF';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmc21xa3FrZnBwcGF3dmVuZHp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxMTAzNjYsImV4cCI6MjA5MjY4NjM2Nn0.VQzDTUqhc1rkTQSCEDHJGrsFVc-pkR2xfoUvtU13_EY';
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 async function signupMentor() {
-  console.log('Attempting to sign up mentor...');
+  console.log('Attempting to sign up mentor: nischay@theboringpeople.in');
   const { data, error } = await supabase.auth.signUp({
-    email: 'mentor@example.com',
-    password: 'password123',
+    email: 'nischay@theboringpeople.in',
+    password: 'nischay123',
     options: {
       data: {
         role: 'mentor',
@@ -22,7 +23,8 @@ async function signupMentor() {
   if (error) {
     console.error('Signup failed:', error.message, error.status);
   } else {
-    console.log('Signup successful!', data.user.id);
+    console.log('Signup successful!', data.user?.id);
+    console.log('You can now log in with nischay@theboringpeople.in / nischay123');
   }
 }
 
