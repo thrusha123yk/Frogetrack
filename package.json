@@ -1,0 +1,8 @@
+{
+  "name": "frogetrack-root",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix frontend run build",
+    "install": "npm --prefix frontend install"
+  }
+}
