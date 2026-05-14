@@ -24,6 +24,16 @@
   --color-violet-500: #8b5cf6;
   --color-violet-600: #7c3aed;
 
+  /* ── Neon High-Energy Palette ────────────────────────────── */
+  --color-neon-green: #39ff14;
+  --color-neon-pink:  #ff00ff;
+  --color-neon-cyan:  #00ffff;
+  --color-neon-lime:  #dfff00;
+  
+  --color-neon-green-glow: rgba(57, 255, 20, 0.4);
+  --color-neon-pink-glow:  rgba(255, 0, 255, 0.4);
+  --color-neon-cyan-glow:  rgba(0, 255, 255, 0.4);
+
   /* Brand accent */
   --color-accent:        #8b5cf6;
   --color-accent-bright: #a855f7;
@@ -55,6 +65,9 @@
   --color-info-fg: #38bdf8;
   --color-info-bg: rgba(56,189,248,0.12);
   --color-info-border: rgba(56,189,248,0.25);
+
+  --color-neon-purple: #bf00ff;
+  --color-neon-purple-glow: rgba(191, 0, 255, 0.4);
 }
 
 /* ────────────────────────────────────────────────────────────
@@ -166,6 +179,35 @@
     box-shadow: 0 0 12px rgba(139,92,246,0.2), inset 0 0 12px rgba(139,92,246,0.05);
   }
 
+  .glow-neon-green {
+    box-shadow: 0 0 20px var(--color-neon-green-glow), 0 0 40px rgba(57, 255, 20, 0.1);
+    border-color: rgba(57, 255, 20, 0.3);
+  }
+  .glow-neon-pink {
+    box-shadow: 0 0 20px var(--color-neon-pink-glow), 0 0 40px rgba(255, 0, 255, 0.1);
+    border-color: rgba(255, 0, 255, 0.3);
+  }
+  .glow-neon-cyan {
+    box-shadow: 0 0 20px var(--color-neon-cyan-glow), 0 0 40px rgba(0, 255, 255, 0.1);
+    border-color: rgba(0, 255, 255, 0.3);
+  }
+  .glow-neon-purple {
+    box-shadow: 0 0 20px var(--color-neon-purple-glow), 0 0 40px rgba(191, 0, 255, 0.1);
+    border-color: rgba(191, 0, 255, 0.3);
+  }
+  .glow-neon-purple-sm {
+    box-shadow: 0 0 10px var(--color-neon-purple-glow);
+  }
+  .glow-neon-pink-sm {
+    box-shadow: 0 0 10px var(--color-neon-pink-glow);
+  }
+  .glow-neon-green-sm {
+    box-shadow: 0 0 10px var(--color-neon-green-glow);
+  }
+  .glow-neon-cyan-sm {
+    box-shadow: 0 0 10px var(--color-neon-cyan-glow);
+  }
+
   /* ── Input ──────────────────────────────────────────────── */
   .input {
     display: flex;
@@ -264,4 +306,19 @@
     to   { opacity: 1; transform: translateY(0); }
   }
   .animate-float-up { animation: float-up 0.5s ease forwards; }
+
+  /* ── Custom Scrollbar ───────────────────────────────────── */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
 }

@@ -75,34 +75,39 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-6 relative overflow-hidden">
-      {/* Background Decor */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-accent/10 blur-[120px] rounded-full pointer-events-none opacity-50" />
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
+    <div className="min-h-screen bg-void flex flex-col items-center justify-center p-6 relative overflow-hidden">
+      {/* ── Background Neon Orbs ──────────────────────────────── */}
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-neon-cyan/10 blur-[120px] rounded-full pointer-events-none animate-pulse" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-neon-pink/10 blur-[120px] rounded-full pointer-events-none animate-pulse duration-[4000ms]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-void border border-white/5 rounded-full pointer-events-none" />
 
-      <div className="w-full max-w-[420px] relative z-10 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="w-full max-w-[440px] relative z-10 space-y-10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
         
         {/* Branding */}
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-zinc-100 flex items-center justify-center shadow-premium-lg">
-            <Sparkles size={24} className="text-zinc-950" />
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-neon-pink to-purple-600 flex items-center justify-center shadow-[0_0_30px_rgba(255,0,255,0.3)] animate-neon-pulse">
+            <Sparkles size={32} className="text-white" />
           </div>
           <div className="text-center space-y-1">
-            <h1 className="text-2xl font-bold text-zinc-100 tracking-tight">ForgeTrack</h1>
-            <p className="text-sm text-zinc-500 font-medium">Enterprise Attendance Management</p>
+            <h1 className="text-4xl font-bold text-white tracking-tight">
+              Forge<span className="text-neon-pink">Track</span>
+            </h1>
+            <p className="text-sm text-zinc-500 font-medium">Welcome Back</p>
           </div>
         </div>
 
-        <Card className="border-zinc-800/50 bg-zinc-900/40 backdrop-blur-xl p-8 md:p-10">
+        <Card className="border-white/10 bg-zinc-950/40 backdrop-blur-3xl p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-neon-cyan/30 to-transparent" />
+          
           {needsPasswordChange ? (
             <form onSubmit={handlePasswordChange} className="space-y-6">
-              <div className="space-y-2 text-center mb-6">
-                <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center mx-auto mb-4 text-accent">
-                  <ShieldCheck size={20} />
+              <div className="space-y-2 text-center mb-8">
+                <div className="w-14 h-14 rounded-full bg-neon-cyan/10 flex items-center justify-center mx-auto mb-4 text-neon-cyan glow-neon-cyan border border-neon-cyan/20">
+                  <ShieldCheck size={28} />
                 </div>
-                <h2 className="text-xl font-bold text-zinc-100">Secure Account</h2>
-                <p className="text-sm text-zinc-400">
-                  Please set a new password to continue.
+                <h2 className="text-2xl font-bold text-white">Set Your Password</h2>
+                <p className="text-sm text-zinc-500 font-medium">
+                  Please set a new password for your account
                 </p>
               </div>
 
@@ -113,90 +118,96 @@ export function Login() {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="••••••••"
+                className="bg-void/50 border-zinc-800 focus:border-neon-cyan"
               />
 
               {error && (
-                <div className="flex items-center gap-2 text-red-400 text-xs bg-red-400/10 p-3 rounded-xl border border-red-400/20">
-                  <AlertCircle size={14} />
+                <div className="flex items-center gap-3 text-neon-pink text-xs font-semibold bg-neon-pink/5 p-4 rounded-xl border border-neon-pink/20">
+                  <AlertCircle size={16} />
                   <span>{error}</span>
                 </div>
               )}
 
-              <Button type="submit" className="w-full h-11" disabled={loading}>
-                {loading ? 'Updating...' : 'Set Password & Login'}
+              <Button type="submit" className="w-full h-12 bg-neon-cyan hover:bg-neon-cyan/80 text-void font-bold glow-neon-cyan border-none" disabled={loading}>
+                {loading ? 'Processing...' : 'Confirm Password'}
               </Button>
             </form>
           ) : (
-            <div className="space-y-8">
+            <div className="space-y-10">
               {/* Tabs */}
-              <div className="flex bg-zinc-950 p-1 rounded-xl border border-zinc-800/50">
+              <div className="flex bg-void p-1 rounded-2xl border border-white/5 shadow-inner">
                 <button
                   className={cn(
-                    "flex-1 py-2 rounded-lg text-[13px] font-semibold transition-all duration-200",
+                    "flex-1 py-3 rounded-xl text-sm font-bold transition-all duration-300",
                     activeTab === 'mentor' 
-                      ? "bg-zinc-800 text-zinc-100 shadow-premium" 
-                      : "text-zinc-500 hover:text-zinc-300"
+                      ? "bg-zinc-900 text-neon-cyan shadow-[0_0_15px_rgba(0,255,255,0.15)] border border-neon-cyan/20" 
+                      : "text-zinc-600 hover:text-zinc-400"
                   )}
                   onClick={() => { setActiveTab('mentor'); setError(''); }}
                 >
-                  Mentor
+                  Mentor Access
                 </button>
                 <button
                   className={cn(
-                    "flex-1 py-2 rounded-lg text-[13px] font-semibold transition-all duration-200",
+                    "flex-1 py-3 rounded-xl text-sm font-bold transition-all duration-300",
                     activeTab === 'student' 
-                      ? "bg-zinc-800 text-zinc-100 shadow-premium" 
-                      : "text-zinc-500 hover:text-zinc-300"
+                      ? "bg-zinc-900 text-neon-pink shadow-[0_0_15px_rgba(255,0,255,0.15)] border border-neon-pink/20" 
+                      : "text-zinc-600 hover:text-zinc-400"
                   )}
                   onClick={() => { setActiveTab('student'); setError(''); }}
                 >
-                  Student
+                  Student Portal
                 </button>
               </div>
 
-              <form onSubmit={handleLogin} className="space-y-5">
-                <Input
-                  label={activeTab === 'mentor' ? 'Business Email' : 'Student USN'}
-                  type={activeTab === 'mentor' ? 'email' : 'text'}
-                  required
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
-                  placeholder={activeTab === 'mentor' ? 'name@company.com' : '4SH24...'}
-                  className="bg-zinc-950/50"
-                />
-                
-                <div className="space-y-1">
+              <form onSubmit={handleLogin} className="space-y-6">
+                <div className="space-y-6">
                   <Input
-                    label="Password"
-                    type="password"
+                    label={activeTab === 'mentor' ? 'Email Address' : 'Student USN'}
+                    type={activeTab === 'mentor' ? 'email' : 'text'}
                     required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="bg-zinc-950/50"
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
+                    placeholder={activeTab === 'mentor' ? 'mentor@example.com' : 'Enter your USN'}
+                    className="bg-void/50 border-zinc-800 focus:border-neon-cyan h-12"
                   />
-                  {activeTab === 'mentor' && (
-                    <div className="flex justify-end px-1">
-                      <button type="button" className="text-xs text-zinc-500 hover:text-accent transition-colors font-medium">
-                        Forgot password?
-                      </button>
-                    </div>
-                  )}
+                  
+                  <div className="space-y-2">
+                    <Input
+                      label="Password"
+                      type="password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="bg-void/50 border-zinc-800 focus:border-neon-cyan h-12"
+                    />
+                    {activeTab === 'mentor' && (
+                      <div className="flex justify-end px-1">
+                        <button type="button" className="text-xs text-zinc-600 hover:text-neon-pink transition-colors font-medium">
+                          Forgot Password?
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {error && (
-                  <div className="flex items-center gap-2 text-red-400 text-xs bg-red-400/10 p-3 rounded-xl border border-red-400/20 animate-in fade-in zoom-in-95 duration-200">
-                    <AlertCircle size={14} />
+                  <div className="flex items-center gap-3 text-neon-pink text-xs font-semibold bg-neon-pink/5 p-4 rounded-xl border border-neon-pink/20 animate-in fade-in zoom-in-95 duration-300">
+                    <AlertCircle size={16} />
                     <span>{error}</span>
                   </div>
                 )}
 
-                <Button type="submit" className="w-full h-11 group" disabled={loading}>
+                <Button type="submit" className={cn(
+                  "w-full h-14 group font-bold transition-all border-none text-white shadow-xl",
+                  activeTab === 'mentor' ? "bg-neon-cyan/80 hover:bg-neon-cyan glow-neon-cyan" : "bg-neon-pink/80 hover:bg-neon-pink glow-neon-pink"
+                )} disabled={loading}>
                   {loading ? (
-                    <div className="w-5 h-5 border-2 border-zinc-950 border-t-transparent rounded-full animate-spin" />
+                    <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin" />
                   ) : (
-                    <span className="flex items-center gap-2">
-                      Sign in to dashboard <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+                    <span className="flex items-center gap-3">
+                      Login <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                     </span>
                   )}
                 </Button>
@@ -205,9 +216,13 @@ export function Login() {
           )}
         </Card>
 
-        <p className="text-center text-xs text-zinc-600 font-medium tracking-wide uppercase">
-          Protected by Enterprise-grade Security
-        </p>
+        <div className="flex flex-col items-center gap-4">
+          <div className="flex items-center gap-3">
+            <div className="h-px w-8 bg-zinc-800" />
+            <p className="text-[10px] text-zinc-700 font-bold uppercase tracking-widest">ForgeTrack Security</p>
+            <div className="h-px w-8 bg-zinc-800" />
+          </div>
+        </div>
       </div>
     </div>
   );

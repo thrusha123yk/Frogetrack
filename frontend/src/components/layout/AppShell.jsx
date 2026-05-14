@@ -16,7 +16,8 @@ export function AppShell() {
     if (path === '/attendance') return 'Mark Attendance';
     if (path === '/history') return 'Student History';
     if (path === '/materials') return 'Learning Materials';
-    if (path === '/upload') return 'Data Upload';
+    if (path === '/upload') return 'Manual Import';
+    if (path === '/ai-upload') return 'AI Smart Upload';
     if (path.startsWith('/me')) return 'My Portal';
     return 'ForgeTrack';
   };

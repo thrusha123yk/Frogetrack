@@ -177,32 +177,36 @@ export function MarkAttendance() {
   const hasChanges = JSON.stringify(attendanceState) !== JSON.stringify(originalState);
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-8 animate-in fade-in duration-500 pb-20">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold text-zinc-100 tracking-tight">Schedule & Attendance</h1>
-          <p className="text-zinc-500 font-medium">Select a date to manage sessions and track student participation.</p>
+          <h1 className="text-4xl font-bold text-white tracking-tight">
+            Mark <span className="text-neon-pink">Attendance</span>
+          </h1>
+          <p className="text-sm text-zinc-500 font-medium">Manage daily student attendance and sessions</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left: Calendar Column */}
         <div className="lg:col-span-5 space-y-6">
-          <CalendarComponent 
-            selectedDate={selectedDate} 
-            onDateSelect={setSelectedDate}
-            sessionDates={sessionDates}
-          />
+          <div className="p-4 bg-zinc-950/40 backdrop-blur-xl border border-white/5 rounded-3xl shadow-2xl">
+            <CalendarComponent 
+              selectedDate={selectedDate} 
+              onDateSelect={setSelectedDate}
+              sessionDates={sessionDates}
+            />
+          </div>
           
-          <Card className="bg-accent/5 border-accent/20">
+          <Card className="bg-neon-cyan/5 border-neon-cyan/20 glow-neon-cyan">
             <div className="flex gap-4">
-              <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center text-accent shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-neon-cyan/20 flex items-center justify-center text-neon-cyan shrink-0">
                 <Info size={20} />
               </div>
               <div className="space-y-1">
-                <h4 className="text-sm font-bold text-zinc-100 uppercase tracking-wider">Quick Tip</h4>
-                <p className="text-[13px] text-zinc-400 leading-relaxed">
-                  Dates with a <span className="text-accent font-bold">dot</span> already have a session scheduled. Click any date to view details or create a new session.
+                <h4 className="text-xs font-bold text-white uppercase tracking-wider">Quick Tip</h4>
+                <p className="text-sm text-zinc-400 leading-relaxed font-medium">
+                  Dates with a <span className="text-neon-cyan font-bold">dot</span> have scheduled sessions.
                 </p>
               </div>
             </div>
@@ -212,130 +216,156 @@ export function MarkAttendance() {
         {/* Right: Contextual Column */}
         <div className="lg:col-span-7">
           {loading ? (
-            <div className="h-[400px] flex items-center justify-center bg-zinc-900/20 rounded-2xl border border-dashed border-zinc-800">
-              <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin"></div>
+            <div className="h-[400px] flex items-center justify-center bg-zinc-900/10 rounded-3xl border border-dashed border-zinc-800 animate-pulse">
+              <div className="w-10 h-10 border-4 border-neon-pink border-t-transparent rounded-full animate-spin glow-neon-pink"></div>
             </div>
           ) : session ? (
             <div className="space-y-6">
               {/* Session Overview Card */}
-              <Card className="border-accent/20 bg-accent/5">
-                <div className="flex justify-between items-start">
+              <Card className="border-neon-green/20 bg-neon-green/5 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <CalendarIcon size={120} />
+                </div>
+                <div className="flex justify-between items-start relative z-10">
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-accent">
-                      <CalendarIcon size={16} />
-                      <span className="text-xs font-bold uppercase tracking-widest">{selectedDate}</span>
+                    <div className="flex items-center gap-2 text-neon-green">
+                      <Clock size={16} className="animate-pulse" />
+                      <span className="text-xs font-bold uppercase tracking-wider">{selectedDate}</span>
                     </div>
-                    <h2 className="text-2xl font-bold text-zinc-100">{session.topic}</h2>
+                    <h2 className="text-3xl font-bold text-white tracking-tight">{session.topic}</h2>
                   </div>
-                  <StatusPill status="success">Active Session</StatusPill>
+                  <div className="px-3 py-1 rounded-full bg-neon-green/10 border border-neon-green/20 text-xs font-bold text-neon-green uppercase tracking-widest">
+                    ACTIVE SESSION
+                  </div>
                 </div>
                 
-                <div className="flex gap-6 mt-6 pt-6 border-t border-zinc-800/50">
+                <div className="flex gap-8 mt-8 pt-8 border-t border-white/5 relative z-10">
                   <div className="space-y-1">
-                    <p className="text-[11px] font-bold text-zinc-500 uppercase tracking-widest">Duration</p>
-                    <p className="text-sm font-medium text-zinc-200">{session.duration_hours} Hours</p>
+                    <p className="text-xs font-bold text-zinc-600 uppercase tracking-widest">Duration</p>
+                    <p className="text-sm font-bold text-zinc-200">{session.duration_hours} HRS</p>
                   </div>
                   <div className="space-y-1">
-                    <p className="text-[11px] font-bold text-zinc-500 uppercase tracking-widest">Type</p>
-                    <p className="text-sm font-medium text-zinc-200 capitalize">{session.session_type}</p>
+                    <p className="text-xs font-bold text-zinc-600 uppercase tracking-widest">Type</p>
+                    <p className="text-sm font-bold text-neon-cyan uppercase">{session.session_type}</p>
                   </div>
                   <div className="space-y-1">
-                    <p className="text-[11px] font-bold text-zinc-500 uppercase tracking-widest">Attendance</p>
-                    <p className="text-sm font-medium text-zinc-200">{presentCount} / {students.length} Present</p>
+                    <p className="text-xs font-bold text-zinc-600 uppercase tracking-widest">Progress</p>
+                    <p className="text-sm font-bold text-neon-green">{presentCount} / {students.length} Present</p>
                   </div>
                 </div>
               </Card>
 
               {/* Student Attendance List */}
-              <Card className="p-0 overflow-hidden">
-                <div className="p-6 border-b border-zinc-800/50 flex justify-between items-center bg-zinc-900/30">
-                  <h3 className="text-lg font-bold text-zinc-100 tracking-tight">Student List</h3>
-                  <div className="flex gap-2">
-                    <Button variant="ghost" onClick={() => markAll(true)} className="text-xs h-8 px-3">Mark All Present</Button>
-                    <Button variant="ghost" onClick={() => markAll(false)} className="text-xs h-8 px-3">Mark All Absent</Button>
+              <Card className="p-0 overflow-hidden border-white/5 bg-zinc-950/40 backdrop-blur-xl shadow-2xl">
+                <div className="p-6 border-b border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 bg-zinc-900/20">
+                  <h3 className="text-lg font-bold text-white tracking-tight">Student List</h3>
+                  <div className="flex gap-3">
+                    <Button variant="ghost" onClick={() => markAll(true)} className="text-xs font-bold uppercase tracking-wider h-8 px-4 border border-zinc-800 hover:border-neon-green/30 hover:text-neon-green">Mark All Present</Button>
+                    <Button variant="ghost" onClick={() => markAll(false)} className="text-xs font-bold uppercase tracking-wider h-8 px-4 border border-zinc-800 hover:border-neon-pink/30 hover:text-neon-pink">Mark All Absent</Button>
                   </div>
                 </div>
                 
-                <div className="divide-y divide-zinc-800/50 max-h-[500px] overflow-y-auto custom-scrollbar">
-                  {students.map(s => (
-                    <label 
-                      key={s.id} 
-                      className={cn(
-                        "flex items-center p-4 hover:bg-zinc-800/30 cursor-pointer transition-colors group",
-                        attendanceState[s.id] && "bg-accent/5"
-                      )}
-                    >
-                      <div className="mr-4">
-                        <div className={cn(
-                          "w-5 h-5 rounded-lg border flex items-center justify-center transition-all",
-                          attendanceState[s.id] 
-                            ? "bg-accent border-accent text-white" 
-                            : "bg-zinc-950 border-zinc-700 text-transparent"
-                        )}>
-                          <CheckCircle2 size={14} strokeWidth={3} />
+                <div className="divide-y divide-white/5 max-h-[500px] overflow-y-auto custom-scrollbar">
+                  {students.length > 0 ? (
+                    students.map(s => (
+                      <label 
+                        key={s.id} 
+                        className={cn(
+                          "flex items-center p-5 hover:bg-white/5 cursor-pointer transition-all group",
+                          attendanceState[s.id] && "bg-neon-green/5"
+                        )}
+                      >
+                        <div className="mr-5">
+                          <div className={cn(
+                            "w-6 h-6 rounded-xl border-2 flex items-center justify-center transition-all duration-300 shadow-lg",
+                            attendanceState[s.id] 
+                              ? "bg-neon-green border-neon-green text-void shadow-[0_0_15px_rgba(57,255,20,0.4)]" 
+                              : "bg-void border-zinc-800 text-transparent"
+                          )}>
+                            <CheckCircle2 size={16} strokeWidth={3} className={attendanceState[s.id] ? "scale-100" : "scale-0 transition-transform"} />
+                          </div>
+                          <input 
+                            id={`attendance-check-${s.id}`}
+                            name={`attendance-check-${s.id}`}
+                            type="checkbox" 
+                            className="hidden"
+                            checked={!!attendanceState[s.id]}
+                            onChange={() => toggleStudent(s.id)}
+                          />
                         </div>
-                        <input 
-                          type="checkbox" 
-                          className="hidden"
-                          checked={!!attendanceState[s.id]}
-                          onChange={() => toggleStudent(s.id)}
-                        />
-                      </div>
-                      <div className="flex-1 flex items-center justify-between">
-                        <div>
-                          <p className="text-sm font-semibold text-zinc-100">{s.name}</p>
-                          <p className="text-[11px] text-zinc-500 font-mono mt-0.5">{s.usn}</p>
+                        <div className="flex-1 flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-bold text-zinc-100 group-hover:text-white transition-colors">{s.name}</p>
+                            <p className="text-xs text-zinc-600 mt-0.5">{s.usn} | {s.branch_code}</p>
+                          </div>
+                          <div className={cn(
+                            "px-3 py-1 rounded text-xs font-bold tracking-wider uppercase transition-all",
+                            attendanceState[s.id] 
+                              ? "bg-neon-green/10 text-neon-green border border-neon-green/20" 
+                              : "bg-zinc-900 text-zinc-700 border border-zinc-800"
+                          )}>
+                            {attendanceState[s.id] ? 'Present' : 'Absent'}
+                          </div>
                         </div>
-                        <span className="text-[10px] font-bold bg-zinc-900 border border-zinc-800 px-2 py-1 rounded text-zinc-500 uppercase tracking-widest">
-                          {s.branch_code}
-                        </span>
-                      </div>
-                    </label>
-                  ))}
+                      </label>
+                    ))
+                  ) : (
+                    <div className="p-20 text-center space-y-4">
+                      <Users size={48} className="mx-auto text-zinc-800" />
+                      <p className="text-sm text-zinc-600 font-bold uppercase tracking-widest">No Students Found</p>
+                    </div>
+                  )}
                 </div>
 
-                <div className="p-6 bg-zinc-900/30 border-t border-zinc-800/50 flex justify-end">
+                <div className="p-8 bg-zinc-900/40 border-t border-white/5 flex justify-end">
                   <Button 
                     onClick={executeSave} 
                     disabled={saving || !hasChanges}
-                    className="gap-2"
+                    className={cn(
+                      "gap-3 h-12 px-8 font-bold uppercase tracking-widest transition-all glow-neon-pink border-none",
+                      hasChanges ? "bg-neon-pink hover:bg-neon-pink/80 text-white" : "bg-zinc-800 text-zinc-500"
+                    )}
                   >
-                    {saving ? 'Saving...' : 'Save Changes'} <ArrowRight size={16} />
+                    {saving ? 'Saving...' : 'Save Attendance'} <ArrowRight size={18} />
                   </Button>
                 </div>
               </Card>
             </div>
           ) : (
             /* Create Session Empty State */
-            <Card className="h-full border-dashed border-zinc-800 bg-zinc-950/40 flex flex-col items-center justify-center text-center p-12">
-              <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-600 mb-6">
-                <Plus size={32} />
+            <Card className="h-full border-dashed border-zinc-800 bg-zinc-950/40 flex flex-col items-center justify-center text-center p-16 rounded-[40px]">
+              <div className="w-20 h-20 rounded-[30px] bg-void border border-zinc-800 flex items-center justify-center text-zinc-700 mb-8 shadow-inner group-hover:border-neon-cyan transition-all">
+                <Plus size={40} className="text-zinc-800 group-hover:text-neon-cyan transition-colors" />
               </div>
-              <h2 className="text-xl font-bold text-zinc-100 mb-2">No Session Scheduled</h2>
-              <p className="text-sm text-zinc-500 max-w-xs mb-8">
-                There is no session recorded for {new Date(selectedDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}. Create one to begin.
+              <h2 className="text-2xl font-bold text-white tracking-tight mb-2">Create Session</h2>
+              <p className="text-sm text-zinc-600 font-medium max-w-xs mb-10 leading-relaxed">
+                No session scheduled for {new Date(selectedDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}. Create a new session to begin.
               </p>
               
-              <form onSubmit={handleCreateSession} className="w-full max-w-sm space-y-4 text-left">
+              <form onSubmit={handleCreateSession} className="w-full max-w-sm space-y-6 text-left">
                 <Input 
-                  label="Session Topic" 
+                  label="Topic" 
                   value={newTopic} 
                   onChange={e => setNewTopic(e.target.value)} 
-                  placeholder="e.g. Introduction to React"
+                  placeholder="e.g. System Design Analysis"
                   required 
+                  className="bg-void/50 border-zinc-800 focus:border-neon-cyan h-12 font-bold text-sm tracking-tight"
                 />
                 <div className="grid grid-cols-2 gap-4">
                   <Input 
-                    label="Duration (Hours)" 
+                    label="Duration (HRS)" 
                     type="number" 
                     step="0.5" 
                     value={newDuration} 
                     onChange={e => setNewDuration(e.target.value)} 
+                    className="bg-void/50 border-zinc-800 focus:border-neon-cyan h-12"
                   />
-                  <div className="space-y-1.5">
-                    <label className="text-[13px] font-medium text-zinc-400 block px-0.5">Session Type</label>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-zinc-600 uppercase tracking-widest block px-1">Session Type</label>
                     <select 
-                      className="flex h-10 w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-700 transition-all duration-200"
+                      id="new-session-type"
+                      name="new-session-type"
+                      className="flex h-12 w-full rounded-2xl border border-zinc-800 bg-void px-4 py-2 text-xs font-bold uppercase tracking-widest text-white focus:border-neon-cyan focus-visible:outline-none transition-all duration-300"
                       value={newType}
                       onChange={e => setNewType(e.target.value)}
                     >
@@ -344,7 +374,9 @@ export function MarkAttendance() {
                     </select>
                   </div>
                 </div>
-                <Button type="submit" className="w-full mt-4 h-11">Create Session & Start</Button>
+                <Button type="submit" className="w-full mt-6 h-14 bg-neon-cyan hover:bg-neon-cyan/80 text-void font-bold uppercase tracking-widest glow-neon-cyan border-none">
+                  Create Session
+                </Button>
               </form>
             </Card>
           )}

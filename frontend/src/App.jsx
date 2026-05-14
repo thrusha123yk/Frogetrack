@@ -13,6 +13,7 @@ import { MarkAttendance } from './pages/mentor/MarkAttendance';
 import { History } from './pages/mentor/History';
 import { Materials } from './pages/mentor/Materials';
 import { Upload } from './pages/mentor/Upload';
+import { AIUpload } from './pages/mentor/AIUpload';
 import { StudentAttendance } from './pages/student/StudentAttendance';
 import { Upcoming } from './pages/student/Upcoming';
 import { StudentMaterials } from './pages/student/StudentMaterials';
@@ -77,6 +78,11 @@ function AppRoutes() {
         <Route path="/upload" element={
           <RoleGuard allowedRoles={['mentor']}>
             <Upload />
+          </RoleGuard>
+        } />
+        <Route path="/ai-upload" element={
+          <RoleGuard allowedRoles={['mentor']}>
+            <AIUpload />
           </RoleGuard>
         } />
 

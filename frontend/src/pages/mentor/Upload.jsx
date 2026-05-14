@@ -160,144 +160,170 @@ export function Upload() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 pb-12">
-      <h1 className="text-h1">Upload Data</h1>
+    <div className="max-w-4xl mx-auto space-y-12 pb-24">
+      <div className="space-y-1">
+        <h1 className="text-4xl font-bold text-white tracking-tight">
+          Manual <span className="text-neon-cyan">Import</span>
+        </h1>
+        <p className="text-sm text-zinc-500 font-medium">Import attendance records from CSV spreadsheets</p>
+      </div>
       
       {/* Stepper */}
-      <div className="flex items-center justify-between px-12 relative mb-12">
-        <div className="absolute top-1/2 left-16 right-16 h-[1px] bg-subtle -z-10"></div>
+      <div className="flex items-center justify-between px-16 relative mb-16">
+        <div className="absolute top-1/2 left-20 right-20 h-px bg-zinc-800 -z-10 shadow-[0_0_10px_rgba(255,255,255,0.05)]"></div>
         {[
-          { num: 1, label: 'Upload' },
-          { num: 2, label: 'Map Columns' },
-          { num: 3, label: 'Preview' }
+          { num: 1, label: 'UPLOAD' },
+          { num: 2, label: 'MAP' },
+          { num: 3, label: 'PREVIEW' }
         ].map(s => (
-          <div key={s.num} className="flex flex-col items-center gap-2">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-body-sm font-medium transition-colors ${step >= s.num ? 'bg-primary text-void' : 'bg-canvas border border-subtle text-secondary'}`}>
-              {step > s.num ? <CheckCircle2 size={16} /> : s.num}
+          <div key={s.num} className="flex flex-col items-center gap-3">
+            <div className={cn(
+              "w-10 h-10 rounded-xl flex items-center justify-center text-xs font-bold transition-all duration-500 shadow-lg",
+              step > s.num ? "bg-neon-green text-void shadow-[0_0_15px_rgba(57,255,20,0.3)]" :
+              step === s.num ? "bg-neon-cyan text-void shadow-[0_0_15px_rgba(0,255,255,0.3)] scale-110" :
+              "bg-zinc-900 border border-zinc-800 text-zinc-600"
+            )}>
+              {step > s.num ? <CheckCircle2 size={18} /> : s.num}
             </div>
-            <span className={`text-caption ${step >= s.num ? 'text-primary' : 'text-tertiary'}`}>{s.label}</span>
+            <span className={cn(
+              "text-[10px] font-bold tracking-widest uppercase transition-colors",
+              step >= s.num ? "text-white" : "text-zinc-700"
+            )}>{s.label}</span>
           </div>
         ))}
       </div>
 
       {step === 1 && (
-        <Card className="p-16 flex flex-col items-center justify-center border-dashed border-2 bg-surface hover:bg-surface-raised transition-colors cursor-pointer relative">
+        <Card className="p-24 flex flex-col items-center justify-center border-dashed border-2 border-zinc-800 bg-zinc-950/40 backdrop-blur-xl hover:border-neon-cyan/50 hover:bg-neon-cyan/5 transition-all cursor-pointer relative group rounded-[40px]">
           <input 
             type="file" 
             accept=".csv" 
             onChange={handleFileUpload} 
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
           />
-          <UploadCloud size={48} className="text-primary mb-6" />
-          <h2 className="text-h2 mb-2">Drag & Drop CSV File</h2>
-          <p className="text-secondary text-body-lg text-center max-w-md">
-            Upload your Zoom or Teams attendance reports. We'll help you extract the data into ForgeTrack.
+          <div className="w-24 h-24 rounded-[30px] bg-void border border-zinc-800 flex items-center justify-center text-zinc-800 mb-8 shadow-inner group-hover:border-neon-cyan/30 group-hover:text-neon-cyan transition-all">
+            <UploadCloud size={48} className="animate-pulse" />
+          </div>
+          <h2 className="text-2xl font-bold text-white tracking-tight mb-3">Upload CSV File</h2>
+          <p className="text-sm text-zinc-600 font-medium text-center max-w-sm leading-relaxed">
+            Compatible with Zoom or Teams CSV exports. Upload your file to begin the import process.
           </p>
+          <div className="absolute inset-0 rounded-[40px] bg-neon-cyan/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
         </Card>
       )}
 
       {step === 2 && (
-        <Card className="space-y-8">
+        <Card className="space-y-10 border-white/5 bg-zinc-950/40 backdrop-blur-xl p-10">
           <div>
-            <h3 className="text-h3 mb-2">Map Your Columns</h3>
-            <p className="text-secondary">Select which column identifies the student, and map the date columns to your scheduled sessions.</p>
+            <h3 className="text-2xl font-bold text-white tracking-tight mb-2">Map Columns</h3>
+            <p className="text-sm text-zinc-600 font-medium">Connect your spreadsheet columns to the system's data fields.</p>
           </div>
 
-          <div className="space-y-4 pt-6 border-t border-subtle">
-            <div className="grid grid-cols-2 items-center gap-6 p-4 rounded-lg bg-surface-inset border border-subtle">
+          <div className="space-y-6 pt-10 border-t border-white/5">
+            <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 p-6 rounded-3xl bg-void/50 border border-white/5 shadow-inner">
               <div>
-                <span className="text-label text-primary block mb-1">Student Identifier</span>
-                <span className="text-caption text-secondary">Unique ID (like USN)</span>
+                <span className="text-xs font-bold text-neon-cyan block uppercase tracking-widest mb-1">Student Identifier</span>
+                <span className="text-xs text-zinc-600 font-bold">Primary column for student USN</span>
               </div>
               <select 
-                className="input" 
+                className="w-full h-14 bg-zinc-900 border border-zinc-800 rounded-2xl px-5 text-xs font-bold uppercase tracking-widest text-white focus:border-neon-cyan transition-all" 
                 value={usnColumn} 
                 onChange={e => setUsnColumn(e.target.value)}
               >
-                <option value="" disabled>Select column...</option>
+                <option value="" disabled>Select Column</option>
                 {headers.map(h => <option key={h} value={h}>{h}</option>)}
               </select>
             </div>
             
-            <div className="mt-8 mb-4">
-              <span className="text-label text-tertiary">MAP SESSIONS</span>
+            <div className="mt-12 mb-6 flex items-center gap-4">
+              <span className="text-xs font-bold text-zinc-700 uppercase tracking-widest">SESSION COLUMNS</span>
+              <div className="h-px flex-1 bg-white/5" />
             </div>
 
-            {headers.filter(h => h !== usnColumn).map(header => (
-              <div key={header} className="grid grid-cols-2 items-center gap-6 py-2">
-                <span className="text-body-sm font-medium text-secondary truncate">{header}</span>
-                <select 
-                  className="input py-2 bg-canvas"
-                  value={sessionColumns[header] || ''}
-                  onChange={e => handleSessionColumnChange(header, e.target.value)}
-                >
-                  <option value="">Do not import this column</option>
-                  {dbSessions.map(s => (
-                    <option key={s.id} value={s.id}>{s.date} - {s.topic}</option>
-                  ))}
-                </select>
-              </div>
-            ))}
+            <div className="grid grid-cols-1 gap-4">
+              {headers.filter(h => h !== usnColumn).map(header => (
+                <div key={header} className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 py-3 group">
+                  <span className="text-sm font-bold text-zinc-500 truncate group-hover:text-white transition-colors">{header}</span>
+                  <select 
+                    className="w-full h-12 bg-void border border-zinc-800 rounded-xl px-4 text-xs font-bold uppercase tracking-widest text-zinc-400 focus:border-neon-cyan focus:text-white transition-all"
+                    value={sessionColumns[header] || ''}
+                    onChange={e => handleSessionColumnChange(header, e.target.value)}
+                  >
+                    <option value="">IGNORE COLUMN</option>
+                    {dbSessions.map(s => (
+                      <option key={s.id} value={s.id}>{s.date} - {s.topic}</option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="flex justify-end pt-6 border-t border-subtle">
+          <div className="flex justify-end pt-10 border-t border-white/5">
             <Button 
               onClick={processUnpivot} 
               disabled={!usnColumn || Object.keys(sessionColumns).length === 0}
-              className="flex items-center gap-2"
+              className="flex items-center gap-3 h-14 px-10 bg-neon-cyan hover:bg-neon-cyan/80 text-void font-bold uppercase tracking-widest glow-neon-cyan border-none transition-all"
             >
-              Continue to Preview <ArrowRight size={16} />
+              Preview Data <ArrowRight size={20} />
             </Button>
           </div>
         </Card>
       )}
 
       {step === 3 && (
-        <Card className="space-y-6">
-          <div className="flex items-start gap-4 p-4 rounded-lg bg-info-bg border border-info-border">
-            <CheckCircle2 className="text-info-fg shrink-0 mt-0.5" size={20} />
+        <Card className="space-y-8 border-white/5 bg-zinc-950/40 backdrop-blur-xl p-10">
+          <div className="flex items-start gap-5 p-6 rounded-3xl bg-neon-green/5 border border-neon-green/20 shadow-[0_0_20px_rgba(57,255,20,0.05)]">
+            <CheckCircle2 className="text-neon-green shrink-0 mt-1" size={24} />
             <div>
-              <h4 className="text-body-lg font-medium text-info-fg">Ready to Import</h4>
-              <p className="text-body-sm text-info-fg/80 mt-1">
-                Found {unpivotedData.length} total attendance records for {Object.keys(sessionColumns).length} sessions across {parsedData.length} students.
+              <h4 className="text-base font-bold text-white tracking-tight">Ready to Import</h4>
+              <p className="text-sm text-zinc-500 font-medium mt-2 leading-relaxed">
+                Found <span className="text-neon-green">{unpivotedData.length} records</span> across <span className="text-neon-cyan">{Object.keys(sessionColumns).length} sessions</span>.
               </p>
             </div>
           </div>
 
-          <div className="border border-subtle rounded-lg overflow-hidden max-h-96 overflow-y-auto">
-            <table className="table w-full">
-              <thead className="sticky top-0 bg-surface z-10 border-b border-subtle">
+          <div className="border border-white/5 rounded-3xl overflow-hidden bg-void/50 shadow-inner max-h-[500px] overflow-y-auto custom-scrollbar">
+            <table className="w-full border-collapse">
+              <thead className="sticky top-0 bg-zinc-900/90 backdrop-blur-md z-10 border-b border-white/5">
                 <tr>
-                  <th>USN</th>
-                  <th>Session ID (Internal)</th>
-                  <th>Status</th>
+                  <th className="pl-8 py-5 text-left text-xs font-bold text-zinc-600 uppercase tracking-widest">USN</th>
+                  <th className="py-5 text-left text-xs font-bold text-zinc-600 uppercase tracking-widest">Session</th>
+                  <th className="pr-8 py-5 text-right text-xs font-bold text-zinc-600 uppercase tracking-widest">Status</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-white/5">
                 {unpivotedData.slice(0, 100).map((row, i) => (
-                  <tr key={i}>
-                    <td className="font-mono text-secondary">{row.usn}</td>
-                    <td className="text-tertiary">{row.session_id.substring(0, 8)}...</td>
-                    <td>
-                      <span className={`pill ${row.present ? 'pill-success' : 'pill-danger'}`}>
+                  <tr key={i} className="hover:bg-white/5 transition-colors">
+                    <td className="pl-8 py-4 font-mono text-xs font-bold text-neon-cyan">{row.usn}</td>
+                    <td className="py-4 text-xs font-bold text-zinc-500 uppercase tracking-widest">{row.session_id.substring(0, 12)}...</td>
+                    <td className="pr-8 py-4 text-right">
+                      <div className={cn(
+                        "inline-flex px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest",
+                        row.present ? "bg-neon-green/10 text-neon-green border border-neon-green/20" : "bg-neon-pink/10 text-neon-pink border border-neon-pink/20"
+                      )}>
                         {row.present ? 'Present' : 'Absent'}
-                      </span>
+                      </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
             {unpivotedData.length > 100 && (
-              <div className="p-4 text-center text-caption text-tertiary bg-surface-inset border-t border-subtle">
-                Showing first 100 records
+              <div className="p-6 text-center text-xs font-bold text-zinc-700 uppercase tracking-widest bg-zinc-900/30 border-t border-white/5">
+                + {unpivotedData.length - 100} Additional Records Truncated
               </div>
             )}
           </div>
 
-          <div className="flex justify-between items-center pt-6 border-t border-subtle">
-            <Button variant="secondary" onClick={() => setStep(2)}>Back to Mapping</Button>
-            <Button onClick={executeImport} disabled={loading}>
-              {loading ? 'Importing...' : 'Confirm & Import Data'}
+          <div className="flex justify-between items-center pt-10 border-t border-white/5">
+            <Button variant="ghost" onClick={() => setStep(2)} className="h-12 px-8 font-bold uppercase tracking-widest text-zinc-600 hover:text-white">Back to Mapping</Button>
+            <Button 
+              onClick={executeImport} 
+              disabled={loading}
+              className="h-14 px-12 bg-neon-green hover:bg-neon-green/80 text-void font-bold uppercase tracking-widest glow-neon-green border-none transition-all shadow-2xl"
+            >
+              {loading ? 'Importing...' : 'Confirm Import'}
             </Button>
           </div>
         </Card>

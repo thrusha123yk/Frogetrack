@@ -64,6 +64,20 @@ export function StudentAttendance() {
   }, [user]);
 
   if (loading) return <div className="p-8 text-secondary">Loading your dashboard...</div>;
+  
+  if (!data || !data.profile) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[60vh] text-center space-y-4">
+        <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-700">
+          <Award size={32} />
+        </div>
+        <h2 className="text-xl font-bold text-zinc-100">No Student Profile Found</h2>
+        <p className="text-zinc-500 max-w-sm">
+          Your account is registered as a student, but no academic details were found. Please contact your mentor to link your profile.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-12">
@@ -117,7 +131,7 @@ export function StudentAttendance() {
                     className={`w-10 h-10 rounded-md flex items-center justify-center font-mono text-xs cursor-help transition-all duration-300 hover:scale-110 ${
                       record.present 
                         ? 'bg-success-bg/30 text-success-fg border border-success-border shadow-[0_0_10px_rgba(16,185,129,0.2)]' 
-
+ 
                         : 'bg-surface-inset text-tertiary border border-subtle'
                     }`}
                   >
