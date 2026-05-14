@@ -1,14 +1,22 @@
--- Mentor user
+-- Mentor users
+-- These are inserted into auth.users (Supabase managed)
+-- We use ON CONFLICT DO NOTHING to avoid errors if run multiple times.
+
+-- 1. Create Mentor Users in Auth
+-- We check for existence first to avoid "destructive" warnings or duplicate errors
 INSERT INTO auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, confirmation_token, email_change, email_change_token_new, recovery_token)
 VALUES 
   ('00000000-0000-0000-0000-000000000000', gen_random_uuid(), 'authenticated', 'authenticated', 'nischay@theboringpeople.in', crypt('nischay123', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{}', NOW(), NOW(), '', '', '', ''),
-  ('00000000-0000-0000-0000-000000000000', gen_random_uuid(), 'authenticated', 'authenticated', 'varun@theboringpeople.in', crypt('varun123', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{}', NOW(), NOW(), '', '', '', '');
+  ('00000000-0000-0000-0000-000000000000', gen_random_uuid(), 'authenticated', 'authenticated', 'varun@theboringpeople.in', crypt('varun123', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{}', NOW(), NOW(), '', '', '', '')
+ON CONFLICT (email) DO NOTHING;
 
+-- 2. Link Mentors in Public Users table
 INSERT INTO public.users (id, email, role, display_name)
 SELECT id, email, 'mentor', CASE WHEN email = 'nischay@theboringpeople.in' THEN 'Nischay B K' ELSE 'Varun' END
-FROM auth.users WHERE email IN ('nischay@theboringpeople.in', 'varun@theboringpeople.in');
+FROM auth.users WHERE email IN ('nischay@theboringpeople.in', 'varun@theboringpeople.in')
+ON CONFLICT (email) DO NOTHING;
 
--- The trigger `on_student_created` handles creating auth.users and public.users for students.
+-- 3. Seed Students (The trigger on_student_created will handle their auth/user rows)
 INSERT INTO public.students (name, usn, branch_code) VALUES
 ('Abhishek Sharma', '4SH24CS001', 'CS'),
 ('Divya Kulkarni', '4SH24CS002', 'AI'),
@@ -34,9 +42,10 @@ INSERT INTO public.students (name, usn, branch_code) VALUES
 ('Uday C', '4SH24IS006', 'IS'),
 ('Varsha N', '4SH24CS012', 'CS'),
 ('Yashaswini', '4SH24AI006', 'AI'),
-('Zoya F', '4SH24CS013', 'CS');
+('Zoya F', '4SH24CS013', 'CS')
+ON CONFLICT (usn) DO NOTHING;
 
--- Sessions
+-- 4. Seed Sessions
 INSERT INTO public.sessions (date, topic, month_number) VALUES
 ('2025-08-05', 'Introduction to AI-ML', 1),
 ('2025-08-12', 'Python for AI', 1),
@@ -52,24 +61,29 @@ INSERT INTO public.sessions (date, topic, month_number) VALUES
 ('2026-01-11', 'Deployment with Vercel', 6),
 ('2026-02-08', 'Supabase Vector', 7),
 ('2026-02-15', 'Agentic Workflows', 7),
-('2026-03-01', 'Capstone Kickoff', 8);
+('2026-03-01', 'Capstone Kickoff', 8)
+ON CONFLICT (date) DO NOTHING;
 
--- Attendance
+-- 5. Seed Attendance (Randomized)
+-- Note: random() means this will change every time it's run.
 INSERT INTO public.attendance (student_id, session_id, present, marked_by)
 SELECT st.id, se.id, random() < 0.8, 'Nischay B K'
 FROM public.students st
-CROSS JOIN public.sessions se;
+CROSS JOIN public.sessions se
+ON CONFLICT (student_id, session_id) DO NOTHING;
 
--- Materials
+-- 6. Seed Materials
 INSERT INTO public.materials (session_id, title, type, url)
 SELECT id, topic || ' Slides', 'slides', 'https://docs.google.com/presentation/d/example'
-FROM public.sessions;
+FROM public.sessions
+ON CONFLICT DO NOTHING;
 
 INSERT INTO public.materials (session_id, title, type, url)
 SELECT id, topic || ' Recording', 'recording', 'https://youtube.com/watch?v=example'
-FROM public.sessions;
+FROM public.sessions
+ON CONFLICT DO NOTHING;
 
--- ImportLog
+-- 7. Seed Import Log
 INSERT INTO public.import_log (filename, uploaded_by, uploaded_at, total_rows, imported_rows, skipped_rows, status)
 VALUES
 ('month1_attendance.csv', 'Nischay B K', '2025-09-01 10:00:00+00', 50, 50, 0, 'completed'),
